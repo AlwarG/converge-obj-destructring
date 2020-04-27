@@ -5,7 +5,8 @@ module.exports = function transformer(file, api) {
 
   function changeDecs(path, objDecs1) {
     let objDecs = objDecs1;
-    let bodyDecs = path.value.body.body;
+
+    let { body: bodyDecs } = path.value.body;
     let typeExludedArray = ['ThisExpression'];
     for (let i = 1; i < objDecs.length; i++) {
       let { varDecPosition, declarationPos } = objDecs[i];
