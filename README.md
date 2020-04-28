@@ -19,6 +19,20 @@ converge-obj-destructuring <TRANSFORM NAME> path/of/files/ or/some**/*glob.js
 ## Transforms
 
 <!--TRANSFORMS_START-->
+```
+let { prop1 } = obj;
+let { prop2 } = obj;
+```
+
+into this
+
+```
+let {
+    prop1,
+    prop1
+  } = obj;
+```
+in the same block
 <!--TRANSFORMS_END-->
 
 ## Contributing
