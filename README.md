@@ -34,8 +34,9 @@ let {
 ```
 in the same block
 <!--TRANSFORMS_END-->
-**###Note:** 
-   if the cases like below
+**Note:**
+
+if the cases like below
 
 ```
 let obj = {
