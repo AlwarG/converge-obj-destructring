@@ -59,6 +59,12 @@ module.exports = function transformer(file, api) {
       );
     }
 
+    function isObjectProp(node) {
+      return (
+        node.type === 'MemberExpression' && node.property && node.property.type === 'Identifier'
+      );
+    }
+
     function hasSimilarArgs(node1Args, node2Args) {
       if (node1Args.length !== node2Args.length) {
         return false;
@@ -106,6 +112,23 @@ module.exports = function transformer(file, api) {
           }
         }
         return hasSimilarArgs(node1Obj.arguments || [], node2Obj.arguments || []);
+      } else if (isObjectProp(node1Obj) && isObjectProp(node2Obj)) {
+        if (node1Obj.property && node2Obj.property) {
+          let node1PropName = node1Obj.property.name;
+          let node2PropName = node2Obj.property.name;
+          if (node1PropName !== node2PropName) {
+            return false;
+          }
+        }
+        if (node1Obj.object && node2Obj.object) {
+          let node1ObjName = node1Obj.object.name;
+          let node2ObjName = node2Obj.object.name;
+          if (node1ObjName !== node2ObjName) {
+            return false;
+          }
+          return isNodeSame(node1Obj.object, node2Obj.object);
+        }
+        return true;
       }
       return false;
     }
