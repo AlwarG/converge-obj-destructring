@@ -82,8 +82,28 @@ module.exports = function transformer(file, api) {
       }
       return hasSimilarArgs;
     }
+    function isORLogicEmptyObjExp(node) {
+      return (
+        node &&
+        node.init &&
+        node.init.type === 'LogicalExpression' &&
+        node.init.operator === '||' &&
+        !!node.init.right &&
+        node.init.right.type === 'ObjectExpression' &&
+        !node.init.right.properties.length
+      );
+    }
 
     function isNodeSame(node1, node2) {
+      let node1Obj = node1.init || node1;
+      let node2Obj = node2.init || node2;
+      if (isORLogicEmptyObjExp(node1) && isORLogicEmptyObjExp(node2)) {
+        return isNodeSameWithoutLogic(node1Obj.left, node2Obj.left);
+      }
+      return isNodeSameWithoutLogic(node1, node2);
+    }
+
+    function isNodeSameWithoutLogic(node1, node2) {
       let node1Obj = node1.init || node1;
       let node2Obj = node2.init || node2;
       if (node1Obj.type !== node2Obj.type) {
